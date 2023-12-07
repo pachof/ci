@@ -19,10 +19,10 @@ jobs:
     runs-on: ubuntu-20.04
 
     env:
-      DEVICE: davinci
+      DEVICE: ginkgo
       VENDOR: xiaomi
       ANDROID_ROOT: /home/runner/work/hadk_16.0/
-      SAILFISH_SKD_VERSION: 3.4.0.24
+      SAILFISH_SKD_VERSION: 4.5.0.16
 
     steps:
     - name: Checkout
@@ -63,15 +63,15 @@ jobs:
     - name: Clone device spec source
       run: |
         source hadk.env
-        git clone https://github.com/sailfish-on-davinci/android_device_xiaomi_davinci.git $ANDROID_ROOT/device/xiaomi/davinci --depth=1 -b lineage-16.0
-        git clone https://github.com/sailfish-on-davinci/android_device_xiaomi_sm6150-common $ANDROID_ROOT/device/xiaomi/sm6150-common --depth=1 -b lineage-16.0
-        git clone https://github.com/sailfish-on-davinci/vendor_xiaomi.git $ANDROID_ROOT/vendor/xiaomi/davinci --depth=1 -b lineage-16.0
-        git clone https://github.com/sailfish-on-davinci/android_kernel_xiaomi_davinci.git $ANDROID_ROOT/kernel/xiaomi/davinci --depth=1 -b mkp
+        git clone https://github.com/sailfish-on-ginkgo/device_xiaomi_ginkgo.git $ANDROID_ROOT/device/xiaomi/ginkgo --depth=1 --single-branch
+        git clone https://github.com/sailfish-on-ginkgo/vendor_xiaomi_ginkgo.git $ANDROID_ROOT/vendor/xiaomi/ginkgo --depth=1 --single-branch
+        git clone https://github.com/sailfish-on-ginkgo/kernel_xiaomi_ginkgo.git $ANDROID_ROOT/kernel/xiaomi/ginkgo --depth=1 --single-branch
         rm -rf $ANDROID_ROOT/hybris/hybris-boot
-        git clone https://github.com/sailfish-on-davinci/hybris-boot.git -b davinci-fixup-mountpoints $ANDROID_ROOT/hybris/hybris-boot --depth=1
-        git clone --recurse-submodules https://github.com/sailfish-on-davinci/droid-hal-davinci.git $ANDROID_ROOT/rpm --depth=1
-        git clone --recurse-submodules https://github.com/sailfish-on-davinci/droid-config-davinci.git $ANDROID_ROOT/hybris/droid-configs --depth=1
-        git clone --recurse-submodules https://github.com/sailfish-on-davinci/droid-hal-version-davinci.git $ANDROID_ROOT/hybris/droid-hal-version-davinci --depth=1
+        git clone https://github.com/sailfish-on-ginkgo/hybris-boot.git  $ANDROID_ROOT/hybris/hybris-boot --depth=1
+        git clone --recurse-submodules https://github.com/sailfish-on-ginkgo/droid-hal-ginkgo.git $ANDROID_ROOT/rpm --depth=1
+        git clone --recurse-submodules https://github.com/sailfish-on-ginkgo/droid-config-ginkgo.git $ANDROID_ROOT/hybris/droid-configs --depth=1
+        git clone --recurse-submodules https://github.com/sailfish-on-ginkgo/droid-hal-version-ginkgo.git $ANDROID_ROOT/hybris/droid-hal-version-ginkgo --depth=1
+        git clone --recurse-submodules https://github.com/sailfish-on-ginkgo/hybris-installer $ANDROID_ROOT/hybris/hybris-installer --depth=1
 
     - name: Build HAL
       run: |
@@ -86,8 +86,8 @@ jobs:
         rm -rf $ANDROID_ROOT/out/build-lineage_davinci.ninja
         chmod +x build-rpm.sh
         sudo docker images|grep -v REPOSITORY|awk '{print $3}'|xargs docker rmi
-        sudo docker pull coderus/sailfishos-platform-sdk:$SAILFISH_SKD_VERSION
-        sudo docker run -v /home/runner/work:/home/nemo/work coderus/sailfishos-platform-sdk:$SAILFISH_SKD_VERSION /bin/sh /home/nemo/work/ci/ci/build-rpm.sh
+        sudo docker pull sailfishos-platform-sdk-aarch64:$SAILFISH_SKD_VERSION
+        sudo docker run -v /home/runner/work:/home/nemo/work sailfishos-platform-sdk-aarch64:$SAILFISH_SKD_VERSION /bin/sh /home/nemo/work/ci/ci/build-rpm.sh
       shell: bash
 
     - name: Check free disk
