@@ -52,8 +52,8 @@ jobs:
         source hadk.env
         mkdir -p $ANDROID_ROOT
         cd $ANDROID_ROOT
-        repo init -u git://github.com/mer-hybris/android.git -b hybris-16.0 --depth=1
-        repo sync -j$(nproc --all) -c --no-clone-bundle --no-tags --optimized-fetch --prune
+        python3 ~/bin/repo init -u git://github.com/mer-hybris/android.git -b hybris-16.0 --depth=1
+        python3 ~/bin/repo sync -j$(nproc --all) -c --no-clone-bundle --no-tags --optimized-fetch --prune
 
     - name: Check free disk
       run: |
