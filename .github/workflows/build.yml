@@ -87,8 +87,9 @@ jobs:
         git clone --recurse-submodules https://github.com/sailfish-on-ginkgo/hybris-installer $ANDROID_ROOT/hybris/hybris-installer --depth=1
         rm -rf $ANDROID_ROOT/external/droidmedia
         git clone https://github.com/sailfishos/droidmedia.git -b 0.20230605.1 $ANDROID_ROOT/external/droidmedia
-        rm -rf $ANDROID_ROOT/tools/metalava/manual
-        git clone https://android.googlesource.com/platform/tools/metalava -b android-9.0.0_r61 $ANDROID_ROOT/tools/metalava/manual
+        git clone --recurse-submodules  https://github.com/mer-hybris/libhybris.git$ANDROID_ROOT/external/libhybris
+        #rm -rf $ANDROID_ROOT/tools/metalava/manual
+        #git clone https://android.googlesource.com/platform/tools/metalava -b android-9.0.0_r61 $ANDROID_ROOT/tools/metalava/manual
 
 
     - name: Build HAL
