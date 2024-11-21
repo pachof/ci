@@ -15,13 +15,14 @@ sudo ln -s /srv/mer/targets/SailfishOS-$SAILFISH_VERSION-$PORT_ARCH /srv/mer/tar
 sudo ln -s /srv/mer/toolings/SailfishOS-$SAILFISH_VERSION /srv/mer/toolings/$VENDOR-$DEVICE
 
 # 3.3.0.16 hack
-sb2 -t $VENDOR-$DEVICE-$PORT_ARCH -m sdk-install -R chmod 777 /boot
+sudo zypper in -y kmod 
+# sb2 -t $VENDOR-$DEVICE-$PORT_ARCH -m sdk-install -R chmod 777 /boot
 
 sdk-assistant list
 
 cd $ANDROID_ROOT
-rpm/dhd/helpers/build_packages.sh -d
+sed -i '/CONFIG_NETFILTER_XT_MATCH_QTAGUID/d' hybris/mer-kernel-check/mer_verify_kernel_config
 
-rpm/dhd/helpers/build_packages.sh -g
 
-rpm/dhd/helpers/build_packages.sh --droid-hal
+cd $ANDROID_ROOT
+rpm/dhd/helpers/build_packages.sh

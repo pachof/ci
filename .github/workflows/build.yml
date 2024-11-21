@@ -26,15 +26,20 @@ jobs:
 
     steps:
 
-    - name: Maximize build space
-      uses: easimon/maximize-build-space@master
+    - name: Free Disk Space (Ubuntu)
+      uses: jlumbroso/free-disk-space@main
       with:
-        root-reserve-mb: 20480
-        swap-size-mb: 1024
-        remove-dotnet: 'true'
-        remove-haskell: 'true'
-        remove-android: 'true'
-        remove-docker-images: 'true'
+        # this might remove tools that are actually needed,
+        # if set to "true" but frees about 6 GB
+        tool-cache: true
+        
+        # all of these default to true, but feel free to set to
+        # "false" if necessary for your workflow
+        android: true
+        dotnet: true
+        haskell: true
+        large-packages: true
+        swap-storage: true
 
     - name: Checkout
       uses: actions/checkout@master
@@ -99,13 +104,11 @@ jobs:
 
     - name: Build dhd in container
       run: |
-        echo "clean more folders"
-        rm -rf $ANDROID_ROOT/prebuilts $ANDROID_ROOT/external/chromium* $ANDROID_ROOT/tools/external/gradle $ANDROID_ROOT/packages
-        rm -rf $ANDROID_ROOT/out/build-lineage_davinci.ninja
         chmod +x build-rpm.sh
         sudo docker images|grep -v REPOSITORY|awk '{print $3}'|xargs docker rmi
         sudo docker pull coderus/sailfishos-platform-sdk:$SAILFISH_SDK_VERSION
-        sudo docker run -v /home/runner/work:/home/mersdk/work coderus/sailfishos-platform-sdk:$SAILFISH_SDK_VERSION /bin/sh /home/mersdk/work/ci/ci/build-rpm.sh
+        sudo docker run -v /home/runner/work:/home/mersdk/work -v /proc/sys/fs/binfmt_misc:/proc/sys/fs/binfmt_misc \
+        coderus/sailfishos-platform-sdk:$SAILFISH_SDK_VERSION  /bin/sh /home/mersdk/work/ci/ci/build-rpm.sh
       shell: bash
 
     - name: Check free disk
