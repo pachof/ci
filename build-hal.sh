@@ -20,5 +20,6 @@ echo 'AUDIOPOLICYSERVICE_ENABLE := 1' >> external/droidmedia/env.mk
 cd $ANDROID_ROOT
 # hybris-patches
 ./hybris-patches/apply-patches.sh --mb
-
+mkdir -p out/host/linux-x86/bin/
+cp ./prebuilts/misc/linux-x86/libufdt/mkdtimg out/host/linux-x86/bin/mkdtimg
 make -j$(nproc --all) hybris-hal droidmedia
