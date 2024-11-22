@@ -105,7 +105,6 @@ jobs:
     - name: Build dhd in container
       run: |
         chmod +x build-rpm.sh
-        sudo docker images|grep -v REPOSITORY|awk '{print $3}'|xargs docker rmi
         sudo docker pull coderus/sailfishos-platform-sdk:$SAILFISH_SDK_VERSION
         sudo docker run -v /home/runner/work:/home/mersdk/work -v /proc/sys/fs/binfmt_misc:/proc/sys/fs/binfmt_misc \
         coderus/sailfishos-platform-sdk:$SAILFISH_SDK_VERSION  /bin/sh /home/mersdk/work/ci/ci/build-rpm.sh
